@@ -6,9 +6,15 @@ import App from '@/App'
 import '@/filters/utils'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 
 Vue.config.productionTip = false
 Vue.use(VueMaterial)
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title
+    next()
+})
 
 /* eslint-disable no-new */
 new Vue({

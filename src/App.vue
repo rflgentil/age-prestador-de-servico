@@ -1,13 +1,24 @@
 <template>
-    <div id="app">
-        <router-view />
-    </div>
+    <md-app id="app" md-waterfall md-mode="flexible">
+        <md-app-content>
+            <router-view />
+        </md-app-content>
+    </md-app>
 </template>
 
 <script>
 export default {
-    name: 'App'
+    name: 'App',
+    data () {
+        return {
+            menuVisible: false
+        }
+    }
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.md-app-container{
+    overflow-x: hidden;
+}
+</style>

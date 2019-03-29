@@ -8,14 +8,20 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/FormPrestador',
-            name: 'FormPrestador',
-            component: FormPrestador
+            path: '/FormPrestador/:id?',
+            name: 'editarPrestador',
+            component: FormPrestador,
+            meta: {
+                title: 'Prestador de Serviço'
+            }
         },
         {
             path: '/',
             name: 'ListPrestador',
-            component: ListPrestador
+            component: ListPrestador,
+            meta: {
+                title: 'Prestadores de Serviço'
+            }
         }
     ]
 })
