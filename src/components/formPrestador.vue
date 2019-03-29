@@ -32,7 +32,7 @@
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="getValidationClass('documento')">
                                     <label for="documento">CPF/CNPJ</label>
-                                    <md-input name="documento" id="documento" v-model="form.documento" :disabled="sending" @keyup="handleTypeDocument" />
+                                    <md-input name="documento" id="documento" v-model="form.documento" v-mask="['###.###.###-##', '##.###.###/####-##']" :disabled="sending" @keyup="handleTypeDocument" />
                                     <span class="md-error" v-if="!$v.form.documento.required">CPF/CNPJ é obrigatório</span>
                                     <span class="md-error" v-else-if="!$v.form.documento.validDocument">Preencha um CPF/CNPJ válido</span>
                                 </md-field>
@@ -55,10 +55,10 @@
 
                     <md-card-content>
                         <div class="md-layout md-gutter">
-                            <div class="md-layout-item md-large-size-33 md-small-size-100">
+                            <div class="md-layout-item md-large-size-25 md-small-size-100">
                                 <md-field :class="getValidationClass('cep')">
                                     <label for="cep">CEP</label>
-                                    <md-input name="cep" id="cep" v-model="form.cep" :disabled="sending" />
+                                    <md-input name="cep" id="cep" v-model="form.cep" v-mask="'#####-###'" :disabled="sending" />
                                     <span class="md-error" v-if="!$v.form.cep.required">CEP é obrigatório</span>
                                 </md-field>
                             </div>
@@ -76,7 +76,7 @@
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="getValidationClass('numero')">
                                     <label for="numero">Número</label>
-                                    <md-input name="numero" id="numero" v-model="form.numero" :disabled="sending" />
+                                    <md-input type="number" name="numero" id="numero" v-model="form.numero" :disabled="sending" />
                                     <span class="md-error" v-if="!$v.form.numero.required">Número é obrigatório</span>
                                 </md-field>
                             </div>
@@ -137,6 +137,7 @@
 <script>
 import Header from '@/components/header'
 import Prestadores from '@/services/prestadores'
+import { mask } from 'vue-the-mask'
 import { validationMixin } from 'vuelidate'
 import { required, email, minLength } from 'vuelidate/lib/validators'
 import { validCPF, validaCNPJ, verificaCpfCnpj } from '@/helpers/helpers'
@@ -146,6 +147,7 @@ const handeValidDocument = value => verificaCpfCnpj(value) === 'cpf' ? validCPF(
 
 export default {
     name: 'FormPrestador',
+    directives: { mask },
     mixins: [validationMixin],
     components: {
         Header
