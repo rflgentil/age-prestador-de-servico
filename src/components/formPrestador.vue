@@ -32,13 +32,13 @@
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="getValidationClass('documento')">
                                     <label for="documento">CPF/CNPJ</label>
-                                    <md-input name="documento" id="documento" v-model="form.documento" :disabled="sending" />
+                                    <md-input name="documento" id="documento" v-model="form.documento" :disabled="sending" @keyup="handleTypeDocument" />
                                     <span class="md-error" v-if="!$v.form.documento.required">CPF/CNPJ é obrigatório</span>
-                                    <span class="md-error" v-else-if="!$v.form.documento.minlength">Preencha um CPF/CNPJ válido</span>
+                                    <span class="md-error" v-else-if="!$v.form.documento.validDocument">Preencha um CPF/CNPJ válido</span>
                                 </md-field>
                             </div>
 
-                            <div class="md-layout-item md-small-size-100">
+                            <div class="md-layout-item md-small-size-100" v-show="typeDocument == 'cnpj'">
                                 <md-field :class="getValidationClass('razaoSocial')">
                                     <label for="razaoSocial">Razão Social</label>
                                     <md-input name="razaoSocial" id="razaoSocial" v-model="form.razaoSocial" :disabled="sending" />
@@ -138,12 +138,11 @@
 import Header from '@/components/header'
 import Prestadores from '@/services/prestadores'
 import { validationMixin } from 'vuelidate'
-import {
-    required,
-    email,
-    minLength
-    // maxLength
-} from 'vuelidate/lib/validators'
+import { required, email, minLength } from 'vuelidate/lib/validators'
+import { validCPF, validaCNPJ, verificaCpfCnpj } from '@/helpers/helpers'
+
+// Verifica se valor digitado no campo de documento é um CPF ou CNPJ e aplica validação especifica.
+const handeValidDocument = value => verificaCpfCnpj(value) === 'cpf' ? validCPF(value) : validaCNPJ(value)
 
 export default {
     name: 'FormPrestador',
@@ -156,6 +155,7 @@ export default {
             dataPrestador: '',
             messagePost: '',
             showDialogPost: false,
+            typeDocument: '',
             form: {
                 nome: null,
                 email: null,
@@ -176,38 +176,16 @@ export default {
 
     validations: {
         form: {
-            nome: {
-                required,
-                minLength: minLength(3)
-            },
-            email: {
-                required,
-                email
-            },
-            razaoSocial: {
-                required
-            },
-            documento: {
-                required
-            },
-            cep: {
-                required
-            },
-            endereco: {
-                required
-            },
-            numero: {
-                required
-            },
-            bairro: {
-                required
-            },
-            cidade: {
-                required
-            },
-            estado: {
-                required
-            }
+            nome: { required, minLength: minLength(3) },
+            email: { required, email },
+            razaoSocial: { required },
+            documento: { required, handeValidDocument },
+            cep: { required },
+            endereco: { required },
+            numero: { required },
+            bairro: { required },
+            cidade: { required },
+            estado: { required }
         }
     },
 
@@ -228,6 +206,8 @@ export default {
             this.form.bairro = this.dataPrestador.bairro
             this.form.cidade = this.dataPrestador.cidade
             this.form.estado = this.dataPrestador.estado
+
+            this.typeDocument = this.form.documento.length > 11 ? 'cnpj' : 'cpf'
         })
     },
 
@@ -287,6 +267,12 @@ export default {
             this.showDialogPost = false
             this.clearForm()
             history.go(-1)
+        },
+
+        handleTypeDocument () {
+            this.typeDocument = verificaCpfCnpj(this.form.documento)
+
+            if (this.typeDocument === 'cpf') this.form.razaoSocial = ' '
         }
     }
 }
