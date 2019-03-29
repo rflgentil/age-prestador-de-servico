@@ -1,8 +1,8 @@
 <template>
 
-    <md-toolbar class="header md-primary">
-        <h1 class="md-title">{{titlePage}}</h1>
-    </md-toolbar>
+    <header class="header">
+        <h1 class="header__title">{{titlePage}}</h1>
+    </header>
 
 </template>
 
@@ -15,6 +15,16 @@ export default {
 
 <style lang="scss">
 .header {
-    margin-bottom: 50px;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 40px;
+    padding-left: 15px;
+    color: $cor-branca;
+    background-color: $cor-soc;
+
+    &__title {
+        margin: 0;
+        padding: 0;
+    }
 }
 </style>

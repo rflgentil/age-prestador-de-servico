@@ -1,9 +1,7 @@
 <template>
-    <md-app id="app" md-waterfall md-mode="flexible">
-        <md-app-content>
-            <router-view />
-        </md-app-content>
-    </md-app>
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
 <script>
@@ -18,6 +16,9 @@ export default {
 </script>
 
 <style lang="scss">
+.md-content {
+    padding: 0;
+}
 .md-app-container{
     overflow-x: hidden;
 }
