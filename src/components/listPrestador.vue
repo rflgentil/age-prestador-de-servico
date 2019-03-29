@@ -72,7 +72,18 @@ export default {
     },
 
     created () {
-        Prestadores.getAllPrestadores().then(response => (this.dataPrestadores = response.data))
+        Prestadores.getAllPrestadores().then(response => {
+            const dataAllPrestadores = response.data
+
+            const dataOrderPrestadores = dataAllPrestadores.sort(function (a, b) {
+                const datePrestadoresA = Number(a.id)
+                const datePrestadoresB = Number(b.id)
+
+                return (datePrestadoresA < datePrestadoresB) ? 1 : ((datePrestadoresB < datePrestadoresA) ? -1 : 0)
+            })
+
+            this.dataPrestadores = dataOrderPrestadores
+        })
     },
 
     methods: {
@@ -109,15 +120,5 @@ export default {
 
         &-cel-acoes {width: 160px;}
     }
-}
-
-.md-dialog {
-    text-align: center;
-    border-top: 5px solid $cor-soc;
-}
-
-.md-dialog-actions {
-    padding-bottom: 25px;
-    justify-content: center;
 }
 </style>

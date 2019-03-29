@@ -82,6 +82,13 @@
                             </div>
 
                             <div class="md-layout-item md-small-size-100">
+                                <md-field :class="getValidationClass('complemento')">
+                                    <label for="complemento">Complemento</label>
+                                    <md-input name="complemento" id="complemento" v-model="form.complemento" :disabled="sending" />
+                                </md-field>
+                            </div>
+
+                            <div class="md-layout-item md-small-size-100">
                                 <md-field :class="getValidationClass('bairro')">
                                     <label for="bairro">Bairro</label>
                                     <md-input name="bairro" id="bairro" v-model="form.bairro" :disabled="sending" />
@@ -91,7 +98,7 @@
                         </div>
 
                         <div class="md-layout md-gutter">
-                            <div class="md-layout-item md-large-size-33 md-small-size-100">
+                            <div class="md-layout-item md-large-size-25 md-small-size-100">
                                 <md-field :class="getValidationClass('cidade')">
                                     <label for="cidade">Cidade</label>
                                     <md-input name="cidade" id="cidade" v-model="form.cidade" :disabled="sending" />
@@ -99,7 +106,7 @@
                                 </md-field>
                             </div>
 
-                            <div class="md-layout-item md-large-size-33 md-small-size-100">
+                            <div class="md-layout-item md-large-size-25 md-small-size-100">
                                 <md-field :class="getValidationClass('estado')">
                                     <label for="estado">Estado</label>
                                     <md-input name="estado" id="estado" v-model="form.estado" :disabled="sending" />
@@ -111,11 +118,19 @@
 
                     <md-card-actions class="form-prestador__box-btns">
                         <md-button @click.native="$router.push('/')">Cancelar</md-button>
-                        <md-button type="submit" class="md-dense md-raised md-primary" :disabled="sending">Criar Prestador</md-button>
+                        <md-button type="submit" class="md-dense md-raised md-primary" :disabled="sending">Salvar</md-button>
                     </md-card-actions>
                 </md-card>
             </form>
         </md-content>
+
+        <md-dialog :md-active.sync="showDialogPost">
+            <md-dialog-title>{{messagePost}}</md-dialog-title>
+
+            <md-dialog-actions>
+                <md-button class="md-raised md-primary" @click="handlePostPrestador">OK</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </template>
 
@@ -139,6 +154,8 @@ export default {
     data () {
         return {
             dataPrestador: '',
+            messagePost: '',
+            showDialogPost: false,
             form: {
                 nome: null,
                 email: null,
@@ -147,6 +164,7 @@ export default {
                 cep: null,
                 endereco: null,
                 numero: null,
+                complemento: null,
                 bairro: null,
                 cidade: null,
                 estado: null
@@ -206,6 +224,7 @@ export default {
             this.form.cep = this.dataPrestador.cep
             this.form.endereco = this.dataPrestador.endereco
             this.form.numero = this.dataPrestador.numero
+            this.form.complemento = this.dataPrestador.complemento
             this.form.bairro = this.dataPrestador.bairro
             this.form.cidade = this.dataPrestador.cidade
             this.form.estado = this.dataPrestador.estado
@@ -232,6 +251,7 @@ export default {
             this.form.cep = null
             this.form.endereco = null
             this.form.numero = null
+            this.form.complemento = null
             this.form.bairro = null
             this.form.cidade = null
             this.form.estado = null
@@ -240,17 +260,20 @@ export default {
         savePrestador () {
             this.sending = true
             const responseForm = typeAction => {
-                const action = typeAction === 'edit' ? 'alterado' : 'cadastrado'
+                this.messagePost = typeAction === 'edit' ? 'Prestador alterado com sucesso' : 'Prestador cadastrado com sucesso'
 
                 this.userSaved = true
                 this.sending = false
-                this.clearForm()
-                alert(`Prestador ${action} com sucesso!`)
+                this.showDialogPost = true
             }
 
             if (this.$route.params.id) {
                 Prestadores.editPrestador(this.$route.params.id, this.form).then(response => {
                     responseForm('edit')
+                })
+            } else {
+                Prestadores.savePrestador(this.form).then(response => {
+                    responseForm('save')
                 })
             }
         },
@@ -258,6 +281,12 @@ export default {
         validateUser () {
             this.$v.$touch()
             if (!this.$v.$invalid) this.savePrestador()
+        },
+
+        handlePostPrestador () {
+            this.showDialogPost = false
+            this.clearForm()
+            history.go(-1)
         }
     }
 }

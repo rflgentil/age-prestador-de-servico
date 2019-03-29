@@ -1,0 +1,9 @@
+.md-dialog {
+    text-align: center;
+    border-top: 5px solid $cor-soc;
+
+    &-actions {
+        padding-bottom: 25px;
+        justify-content: center;
+    }
+}
