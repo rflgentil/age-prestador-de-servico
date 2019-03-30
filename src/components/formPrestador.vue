@@ -131,6 +131,12 @@
                 <md-button class="md-raised md-primary" @click="handlePostPrestador">OK</md-button>
             </md-dialog-actions>
         </md-dialog>
+
+        <md-dialog-alert
+            :md-active.sync="errorDialog"
+            md-title="OPS! Aconteceu um erro inesperado"
+            md-content="Por favor, tente novamente mais tarde."
+            class="md-dialog--error" />
     </div>
 </template>
 
@@ -155,6 +161,7 @@ export default {
     data () {
         return {
             dataPrestador: '',
+            errorDialog: false,
             messagePost: '',
             showDialogPost: false,
             typeDocument: '',
@@ -209,7 +216,9 @@ export default {
             this.form.cidade = this.dataPrestador.cidade
             this.form.estado = this.dataPrestador.estado
 
-            this.typeDocument = this.form.documento.length > 11 ? 'cnpj' : 'cpf'
+            this.typeDocument = this.form.documento.length > 14 ? 'cnpj' : 'cpf'
+        }).catch(() => {
+            this.errorDialog = true
         })
     },
 
@@ -252,10 +261,14 @@ export default {
             if (this.$route.params.id) {
                 Prestadores.editPrestador(this.$route.params.id, this.form).then(response => {
                     responseForm('edit')
+                }).catch(() => {
+                    this.errorDialog = true
                 })
             } else {
                 Prestadores.savePrestador(this.form).then(response => {
                     responseForm('save')
+                }).catch(() => {
+                    this.errorDialog = true
                 })
             }
         },

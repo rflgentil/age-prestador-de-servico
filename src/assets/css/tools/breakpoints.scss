@@ -1,0 +1,49 @@
+@mixin breakpoint($name) {
+	// Mobile
+	@if $name == mobile OR $name == mobile--e-abaixo {
+		@media screen and (max-width: 767px) { @content; }
+	}
+
+	// Mobile portrait e landscape
+	@if $name == mobile-portrait {
+		@media screen and (max-width: 767px) and (orientation: portrait){ @content; }
+	}
+
+	@if $name == mobile-landscape {
+		@media screen and (max-width: 767px) and (orientation: landscape){ @content; }
+	}
+
+
+	// Tablet
+	@if $name == tablet {
+		@media screen and (min-width: 768px) and (max-width: 991px) { @content; }
+	}
+
+	@if $name == tablet--e-abaixo {
+		@media screen and (max-width: 991px) { @content; }
+	}
+
+	@if $name == tablet--e-acima {
+		@media screen and (min-width: 768px) { @content; }
+	}
+
+
+	// Desktop
+	@if $name == desktop {
+		@media screen and (min-width: 992px) and (max-width: 1199px) { @content; }
+	}
+
+	@if $name == desktop--e-abaixo {
+		@media screen and (max-width: 1199px) { @content; }
+	}
+
+	@if $name == desktop--e-acima {
+		@media screen and (min-width: 992px) { @content; }
+	}
+
+
+	// Desktop
+	@if $name == desktop-hd OR $name == desktop-hd--e-acima  {
+		@media screen and (min-width: 1200px) { @content; }
+	}
+}

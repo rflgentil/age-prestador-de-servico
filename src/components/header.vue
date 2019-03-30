@@ -25,6 +25,10 @@ export default {
     &__title {
         margin: 0;
         padding: 0;
+
+        @include breakpoint('mobile') {
+            font-size: 20px;
+        }
     }
 }
 </style>
