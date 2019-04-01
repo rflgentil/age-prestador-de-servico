@@ -1,6 +1,6 @@
 <template>
     <div class="form-prestador">
-        <Header :titlePage='!!!$route.params.id ? "Novo Prestador de Serviço" : "Editar Prestador de Serviço"' />
+        <Header :titlePage='$route.params.id ? "Editar Prestador de Serviço" : "Novo Prestador de Serviço"' />
 
         <md-content>
             <form novalidate class="md-layout md-alignment-center" @submit.prevent="validateUser">
